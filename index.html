@@ -25,35 +25,35 @@
 
         <div class="section">
         <div class="downloads">
-            <p><strong>Downloads</strong></p>
+            <p><strong>downloads</strong></p>
             <ul>
                 <li><a href="https://github.com/macrobean/dist/releases/download/v1.0.0/macrobean-macos.tar.gz">macrobean-macos.tar.gz</a></li>
                 <li><a href="https://github.com/macrobean/dist/releases/download/v1.0.0/macrobean-linux.tar.gz">macrobean-linux.tar.gz</a></li>
-                <li><a href="https://github.com/macrobean/dist">Source Code</a></li>
+                <li><a href="https://github.com/macrobean/dist">source code</a></li>
             </ul>
         </div>
 
         <hr>
 
         <div class="toc">
-            <h2>Table of Contents</h2>
+            <h2>table of contents</h2>
             <ul>
-                <li><a href="#core-concepts">1. Core Concepts</a></li>
-                <li><a href="#installation">2. Installation and Building from Source</a></li>
-                <li><a href="#cli">3. Command-Line Flags: The Complete Guide</a></li>
-                <li><a href="#lua-api">4. The Lua API</a></li>
-                <li><a href="#db-api">5. The Database API (--db)</a></li>
-                <li><a href="#security">6. Security Deep Dive</a></li>
-                <li><a href="#use-cases">7. Practical Use Cases</a></li>
+                <li><a href="#core-concepts">1. core concepts</a></li>
+                <li><a href="#installation">2. installation and building from source</a></li>
+                <li><a href="#cli">3. command-line flags</a></li>
+                <li><a href="#lua-api">4. lua API</a></li>
+                <li><a href="#db-api">5. database API (--db)</a></li>
+                <li><a href="#security">6. security</a></li>
+                <li><a href="#use-cases">7. some use cases</a></li>
             </ul>
         </div>
 
         <hr>
 
         <div class="section">
-        <h2 id="core-concepts">1. Core Concepts</h2>
+        <h2 id="core-concepts">1. core concepts</h2>
 
-        <h3>The Philosophy: A Retreat to Sanity</h3>
+        <h3>the philosophy: a retreat to sanity</h3>
 
         <p>Macrobean is a deliberate rejection of the accidental complexity that plagues modern software deployment. It champions the idea of a <strong>self-sufficient artifact</strong>: a single, executable file that is the entire application. There are no external runtimes to install, no package managers to appease, and no dependency trees to audit. Deployment is <code>scp</code>. Rollbacks are <code>mv</code>.</p>
 
@@ -61,7 +61,7 @@
 
         <p>Macrobean owes a significant intellectual and spiritual debt to the `redbean` project. `redbean` demonstrated that a single-file, cross-platform, high-performance web server was not just possible, but that it could be elegant and powerful. More on the philosopy here: <a href="https://seedawk.bearblog.dev/macrobean/">kill the bloat</a></p>
 
-        <h3>The Architecture: A ZIP-Appended Executable</h3>
+        <h3>ZIP-appended executable</h3>
 
         <p>The <code>macrobean</code> binary is a standard compiled executable. The magic lies in what comes after the executable code. A ZIP archive containing all the site assets (HTML, CSS, Lua scripts, etc.) is appended to the end of the binary.</p>
 
@@ -82,9 +82,9 @@
         </div>
 
         <div class="section">
-        <h2 id="installation">2. Installation and Building from Source</h2>
+        <h2 id="installation">2. installation and building from source</h2>
 
-        <h3>Using Pre-compiled Binaries</h3>
+        <h3>using pre-compiled binaries</h3>
 
         <p>The easiest way to use Macrobean is to download a pre-compiled binary for your OS. The only step is to make it executable:</p>
 
@@ -94,7 +94,7 @@
 
         <pre><code>xattr -d com.apple.quarantine macrobean.com</code></pre>
 
-        <h3>Building from Source</h3>
+        <h3>building from source</h3>
 
         <p>To build Macrobean, you need a C compiler (<code>gcc</code> or <code>clang</code>) and the development headers for Lua and SQLite. If you want TLS support, you'll also need mbedTLS.</p>
 
@@ -107,7 +107,7 @@
         <p><strong>Compile Command (With TLS):</strong></p>
         <pre><code>gcc -O2 -DUSE_TLS -o macrobean macrobean.c -llua5.4 -lsqlite3 -lmbedtls -lmbedcrypto -lmbedx509</code></pre>
 
-        <h3>Creating the Final Executable</h3>
+        <h3>creating the final executable</h3>
 
         <p>After compiling, you have the <code>macrobean</code> binary. To create the final, self-contained executable, you need to append your site's ZIP archive.</p>
 
@@ -131,7 +131,7 @@ echo "Hello from within!" > site/index.html</code></pre>
         </div>
 
         <div class="section">
-        <h2 id="cli">3. Command-Line Flags: The Complete Guide</h2>
+        <h2 id="cli">3. command-Line flags</h2>
 
         <p>Macrobean is configured entirely via command-line flags. There are no config files.</p>
 
@@ -198,7 +198,7 @@ echo "Hello from within!" > site/index.html</code></pre>
         <hr>
 
         <div class="section">
-        <h2 id="lua-api">5. The Lua API</h2>
+        <h2 id="lua-api">5. lua API</h2>
 
         <p>When <code>--lua</code> is enabled, Macrobean exposes a simple but powerful API to your Lua scripts.</p>
 
@@ -302,7 +302,7 @@ end)</code></pre>
 <hr>
 
 <div class="section">
-<h2 id="db-api">6. The Database API (<code>--db</code>)</h2>
+<h2 id="db-api">6. database API (<code>--db</code>)</h2>
 
 <p>When <code>--db</code> is enabled, Macrobean provides a global <code>db</code> table for interacting with a SQLite database.</p>
 
@@ -371,7 +371,7 @@ return "Saved " .. k</code></pre>
 <hr>
 
 <div class="section">
-<h2 id="security">7. Security Deep Dive</h2>
+<h2 id="security">7. security</h2>
 
 <h3>TLS with mbedTLS (<code>--tls</code>)</h3>
 
@@ -412,7 +412,7 @@ return "Saved " .. k</code></pre>
 <hr>
 
 <div class="section">
-<h2 id="use-cases">8. Practical Use Cases</h2>
+<h2 id="use-cases">8. some use cases</h2>
 
 <p>Macrobean is well-suited for a variety of tasks where simplicity and portability are paramount.</p>
 
@@ -428,6 +428,12 @@ return "Saved " .. k</code></pre>
         <p>Macrobean can be used to create a lightweight API server. Use Lua to handle API requests, and SQLite to store your data. The result is a single-file, dependency-free API server that is easy to deploy and maintain.</p>
         </div>
     </div>
+        <footer class="site-footer">
+        <div class="container">
+            <p>🦄 If you find this project useful, please consider giving it a star on <a href="https://github.com/macrobean" target="_blank" rel="noopener">github</a> to show your support!</p>
+            <p>Your support motivates me for further development and improvements. 🫡Thank you!</p>
+        </div>
+    </footer>
 </body>
 </html>
 </html>
