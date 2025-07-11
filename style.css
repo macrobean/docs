@@ -63,3 +63,43 @@ th, td {
 th {
     background-color: #f5f5f5;
 }
+.site-footer {
+    background-color: #f8f9fa;
+    padding: 2rem 0;
+    margin-top: 3rem;
+    border-top: 1px solid #eaecef;
+    color: #6a737d;
+    font-size: 0.9rem;
+}
+
+.site-footer .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    text-align: center;
+}
+
+.site-footer p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+.site-footer a {
+    color: #0366d6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .site-footer {
+        padding: 1.5rem 0;
+    }
+    
+    .site-footer p {
+        font-size: 0.85rem;
+    }
+}
