@@ -18,11 +18,12 @@
         <h1>macrobean</h1>
 
         <blockquote>
-            Macrobean is a self-contained, single-binary web server designed for simplicity, security, and portability. It can serve static files, execute dynamic Lua scripts, query SQLite databases, and handle TLS (HTTPS) traffic without requiring any external runtimes, libraries, or configuration files.
+            macrobean is a self-contained, single-binary web server designed for simplicity, security, and portability. It can serve static files, execute dynamic Lua scripts, query SQLite databases, and handle TLS (HTTPS) traffic without requiring any external runtimes, libraries, or configuration files.
 
             It's built for developers who need to deploy simple web applications quickly, hobbyists hosting a personal site, or anyone who values a minimal, dependency-free toolchain.
         </blockquote>
 
+        <div class="section">
         <div class="downloads">
             <p><strong>Downloads</strong></p>
             <ul>
@@ -49,6 +50,7 @@
 
         <hr>
 
+        <div class="section">
         <h2 id="core-concepts">1. Core Concepts</h2>
 
         <h3>The Philosophy: A Retreat to Sanity</h3>
@@ -56,6 +58,8 @@
         <p>Macrobean is a deliberate rejection of the accidental complexity that plagues modern software deployment. It champions the idea of a <strong>self-sufficient artifact</strong>: a single, executable file that is the entire application. There are no external runtimes to install, no package managers to appease, and no dependency trees to audit. Deployment is <code>scp</code>. Rollbacks are <code>mv</code>.</p>
 
         <p>This is achieved by combining a minimal C web server with a Lua interpreter, a SQLite engine, and the application's assets, all within a single file.</p>
+
+        <p>Macrobean owes a significant intellectual and spiritual debt to the `redbean` project. `redbean` demonstrated that a single-file, cross-platform, high-performance web server was not just possible, but that it could be elegant and powerful. More on the philosopy here: <a href="https://seedawk.bearblog.dev/macrobean/">kill the bloat</a></p>
 
         <h3>The Architecture: A ZIP-Appended Executable</h3>
 
@@ -75,6 +79,9 @@
 
         <hr>
 
+        </div>
+
+        <div class="section">
         <h2 id="installation">2. Installation and Building from Source</h2>
 
         <h3>Using Pre-compiled Binaries</h3>
@@ -97,7 +104,7 @@
         <p><strong>Compile Command (No TLS):</strong></p>
         <pre><code>gcc -O2 -o macrobean macrobean.c -llua5.4 -lsqlite3</code></pre>
 
-        <p><strong>Compile Command (With TLS):</p>
+        <p><strong>Compile Command (With TLS):</strong></p>
         <pre><code>gcc -O2 -DUSE_TLS -o macrobean macrobean.c -llua5.4 -lsqlite3 -lmbedtls -lmbedcrypto -lmbedx509</code></pre>
 
         <h3>Creating the Final Executable</h3>
@@ -121,6 +128,9 @@ echo "Hello from within!" > site/index.html</code></pre>
 
         <hr>
 
+        </div>
+
+        <div class="section">
         <h2 id="cli">3. Command-Line Flags: The Complete Guide</h2>
 
         <p>Macrobean is configured entirely via command-line flags. There are no config files.</p>
@@ -183,9 +193,11 @@ echo "Hello from within!" > site/index.html</code></pre>
                 </tr>
             </tbody>
         </table>
+        </div>
 
         <hr>
 
+        <div class="section">
         <h2 id="lua-api">5. The Lua API</h2>
 
         <p>When <code>--lua</code> is enabled, Macrobean exposes a simple but powerful API to your Lua scripts.</p>
@@ -197,7 +209,9 @@ echo "Hello from within!" > site/index.html</code></pre>
         <pre><code>-- Example structure of the global 'request' table
 request = {
   -- The full request path, including query string
-  path = "/api/users?id=123",
+  path = "/api/users?id=123"
+  -- Other request properties would be documented here
+}
 
   -- The HTTP method (e.g., "GET", "POST")
   method = "POST",
@@ -283,35 +297,38 @@ end</code></pre>
   return json(user) -- returns '{"id":1,"name":"Alice","active":true}'
 end)</code></pre>
 
-        <hr>
+</div>
 
-        <h2 id="db-api">6. The Database API (<code>--db</code>)</h2>
+<hr>
 
-        <p>When <code>--db</code> is enabled, Macrobean provides a global <code>db</code> table for interacting with a SQLite database.</p>
+<div class="section">
+<h2 id="db-api">6. The Database API (<code>--db</code>)</h2>
 
-        <p><strong>How it Works:</strong></p>
+<p>When <code>--db</code> is enabled, Macrobean provides a global <code>db</code> table for interacting with a SQLite database.</p>
 
-        <p>Your database file must be named <code>data.db</code> and placed in your <code>site</code> directory. When a Lua script calls a <code>db</code> function, Macrobean:</p>
+<p><strong>How it Works:</strong></p>
 
-        <ol>
-            <li>Extracts <code>site/data.db</code> from the in-memory ZIP archive.</li>
-            <li>Writes it to a temporary file at <code>/tmp/macrobean.db</code>.</li>
-            <li>Opens this temporary file with SQLite and executes the query.</li>
-            <li>If the query was a write operation (<code>db.exec</code>), the temporary file is updated.</li>
-        </ol>
+<p>Your database file must be named <code>data.db</code> and placed in your <code>site</code> directory. When a Lua script calls a <code>db</code> function, Macrobean:</p>
 
-        <p>This means your database is essentially read-only unless you are using the <code>--watch</code> flag, which will periodically re-extract the database from the <code>site.zip</code> file.</p>
+<ol>
+    <li>Extracts <code>site/data.db</code> from the in-memory ZIP archive.</li>
+    <li>Writes it to a temporary file at <code>/tmp/macrobean.db</code>.</li>
+    <li>Opens this temporary file with SQLite and executes the query.</li>
+    <li>If the query was a write operation (<code>db.exec</code>), the temporary file is updated.</li>
+</ol>
 
-        <h3><code>db.query(db_path, sql_query)</code></h3>
+<p>This means your database is essentially read-only unless you are using the <code>--watch</code> flag, which will periodically re-extract the database from the <code>site.zip</code> file.</p>
 
-        <p>Executes a <code>SELECT</code> query. It always takes the path to the database as the first argument.</p>
+<h3><code>db.query(db_path, sql_query)</code></h3>
 
-        <ul>
-            <li><strong>Returns:</strong> An array of tables, where each table represents a row. Returns <code>nil</code> on error.</li>
-        </ul>
+<p>Executes a <code>SELECT</code> query. It always takes the path to the database as the first argument.</p>
 
-        <p><strong>Example (<code>query.lua</code>):</strong></p>
-        <pre><code>-- URL: /query.lua?key=some_key
+<ul>
+    <li><strong>Returns:</strong> An array of tables, where each table represents a row. Returns <code>nil</code> on error.</li>
+</ul>
+
+<p><strong>Example (<code>query.lua</code>):</strong></p>
+<pre><code>-- URL: /query.lua?key=some_key
 
 local key = request.query.key
 if not key then return "Missing key parameter" end
@@ -327,16 +344,16 @@ else
   return "Not found"
 end</code></pre>
 
-        <h3><code>db.exec(db_path, sql_query)</code></h3>
+<h3><code>db.exec(db_path, sql_query)</code></h3>
 
-        <p>Executes a <code>CREATE</code>, <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code> statement.</p>
+<p>Executes a <code>CREATE</code>, <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code> statement.</p>
 
-        <ul>
-            <li><strong>Returns:</strong> <code>true</code> on success, <code>nil</code> on error.</li>
-        </ul>
+<ul>
+    <li><strong>Returns:</strong> <code>true</code> on success, <code>nil</code> on error.</li>
+</ul>
 
-        <p><strong>Example (<code>submit.lua</code>):</strong></p>
-        <pre><code>-- URL: /submit.lua?key=foo&value=bar (via POST)
+<p><strong>Example (<code>submit.lua</code>):</strong></p>
+<pre><code>-- URL: /submit.lua?key=foo&value=bar (via POST)
 
 if request.method ~= "POST" then return "Invalid method" end
 
@@ -349,53 +366,58 @@ db.exec("/tmp/macrobean.db", sql)
 
 return "Saved " .. k</code></pre>
 
-        <hr>
+</div>
 
-        <h2 id="security">7. Security Deep Dive</h2>
+<hr>
 
-        <h3>TLS with mbedTLS (<code>--tls</code>)</h3>
+<div class="section">
+<h2 id="security">7. Security Deep Dive</h2>
 
-        <p>When compiled with <code>-DUSE_TLS</code>, Macrobean uses the mbedTLS library to provide HTTPS. The <code>init_tls_server()</code> function in <code>macrobean.c</code> performs the following steps:</p>
+<h3>TLS with mbedTLS (<code>--tls</code>)</h3>
 
-        <ol>
-            <li>Initializes the mbedTLS configuration, entropy source, and random number generator.</li>
-            <li>Parses the server certificate provided via <code>--cert</code>.</li>
-            <li>Parses the private key provided via <code>--key</code>.</li>
-            <li>Sets up the SSL configuration with the loaded certificate and key.</li>
-        </ol>
+<p>When compiled with <code>-DUSE_TLS</code>, Macrobean uses the mbedTLS library to provide HTTPS. The <code>init_tls_server()</code> function in <code>macrobean.c</code> performs the following steps:</p>
 
-        <p>When a new connection arrives, <code>handle_tls_client()</code> is called instead of <code>handle_http_client()</code>. It performs the TLS handshake before reading the HTTP request from the encrypted stream.</p>
+<ol>
+    <li>Initializes the mbedTLS configuration, entropy source, and random number generator.</li>
+    <li>Parses the server certificate provided via <code>--cert</code>.</li>
+    <li>Parses the private key provided via <code>--key</code>.</li>
+    <li>Sets up the SSL configuration with the loaded certificate and key.</li>
+</ol>
 
-        <h3>Sandboxing (<code>--sandbox</code>)</h3>
+<p>When a new connection arrives, <code>handle_tls_client()</code> is called instead of <code>handle_http_client()</code>. It performs the TLS handshake before reading the HTTP request from the encrypted stream.</p>
 
-        <p>The <code>--sandbox</code> flag is a critical security feature. The <code>init_lua()</code> function in <code>macrobean.c</code> performs these steps when sandboxing is enabled:</p>
+<h3>Sandboxing (<code>--sandbox</code>)</h3>
 
-        <ol>
-            <li><strong>Removes Dangerous Libraries:</strong> It explicitly sets the global variables for <code>io</code>, <code>os</code>, <code>package</code>, and <code>debug</code> to <code>nil</code>, effectively removing them from the Lua environment. This prevents scripts from accessing the filesystem, executing shell commands, or loading arbitrary code.</li>
-            <li><strong>Installs a Timeout Hook:</strong> It uses <code>lua_sethook</code> to register a <code>timeout_hook</code> function. This function is called by the Lua interpreter every <code>SANDBOX_LIMIT</code> (1,000,000) instructions. If the hook is called, it means the script has been running for too long, and it immediately terminates the script with an error. This prevents denial-of-service attacks caused by infinite loops.</li>
-        </ol>
+<p>The <code>--sandbox</code> flag is a critical security feature. The <code>init_lua()</code> function in <code>macrobean.c</code> performs these steps when sandboxing is enabled:</p>
 
-        <h3>Process Isolation (<code>--fork</code>)</h3>
+<ol>
+    <li><strong>Removes Dangerous Libraries:</strong> It explicitly sets the global variables for <code>io</code>, <code>os</code>, <code>package</code>, and <code>debug</code> to <code>nil</code>, effectively removing them from the Lua environment. This prevents scripts from accessing the filesystem, executing shell commands, or loading arbitrary code.</li>
+    <li><strong>Installs a Timeout Hook:</strong> It uses <code>lua_sethook</code> to register a <code>timeout_hook</code> function. This function is called by the Lua interpreter every <code>SANDBOX_LIMIT</code> (1,000,000) instructions. If the hook is called, it means the script has been running for too long, and it immediately terminates the script with an error. This prevents denial-of-service attacks caused by infinite loops.</li>
+</ol>
 
-        <p>The <code>--fork</code> flag provides OS-level isolation between requests. In the main <code>while(1)</code> loop, after <code>accept()</code>-ing a new connection, the server does the following:</p>
+<h3>Process Isolation (<code>--fork</code>)</h3>
 
-        <ol>
-            <li>Calls <code>fork()</code> to create a child process.</li>
-            <li><strong>In the child process:</strong> The child closes the main listening socket and calls either <code>handle_http_client</code> or <code>handle_tls_client</code> to process the request. After the request is finished, the child process exits (<code>_exit(0)</code>).</li>
-            <li><strong>In the parent process:</strong> The parent closes the client connection socket and immediately goes back to the <code>select()</code> loop to wait for new connections. It does not wait for the child to finish.</li>
-        </ol>
+<p>The <code>--fork</code> flag provides OS-level isolation between requests. In the main <code>while(1)</code> loop, after <code>accept()</code>-ing a new connection, the server does the following:</p>
 
-        <p>The <code>signal(SIGCHLD, SIG_IGN)</code> call in <code>main()</code> tells the kernel that the parent process is not interested in the exit status of its children, so the kernel will automatically reap the zombie processes, preventing resource leaks.</p>
+<ol>
+    <li>Calls <code>fork()</code> to create a child process.</li>
+    <li><strong>In the child process:</strong> The child closes the main listening socket and calls either <code>handle_http_client</code> or <code>handle_tls_client</code> to process the request. After the request is finished, the child process exits (<code>_exit(0)</code>).</li>
+    <li><strong>In the parent process:</strong> The parent closes the client connection socket and immediately goes back to the <code>select()</code> loop to wait for new connections. It does not wait for the child to finish.</li>
+</ol>
 
-        <hr>
+<p>The <code>signal(SIGCHLD, SIG_IGN)</code> call in <code>main()</code> tells the kernel that the parent process is not interested in the exit status of its children, so the kernel will automatically reap the zombie processes, preventing resource leaks.</p>
 
-        <h2 id="use-cases">8. Practical Use Cases</h2>
+</div>
 
-        <p>Macrobean is well-suited for a variety of tasks where simplicity and portability are paramount.</p>
+<hr>
 
-        <h3>Simple Static Site Hosting</h3>
-        <p>The most basic use case is serving a static website. Simply package your HTML, CSS, and JavaScript files into a <code>site.zip</code>, append it to the <code>macrobean</code> binary, and you have a single-file web server that you can deploy anywhere.</p>
+<div class="section">
+<h2 id="use-cases">8. Practical Use Cases</h2>
 
+<p>Macrobean is well-suited for a variety of tasks where simplicity and portability are paramount.</p>
+
+<h3>Simple Static Site Hosting</h3>
+<p>The most basic use case is serving a static website. Simply package your HTML, CSS, and JavaScript files into a <code>site.zip</code>, append it to the <code>macrobean</code> binary, and you have a single-file web server that you can deploy anywhere.</p>
         <h3>Prototyping and Demos</h3>
         <p>Macrobean is an excellent tool for quickly prototyping web applications or creating self-contained demos. You can build a fully functional application with Lua and SQLite, and then distribute it as a single file that anyone can run without any setup.</p>
 
@@ -404,6 +426,8 @@ return "Saved " .. k</code></pre>
 
         <h3>API Server</h3>
         <p>Macrobean can be used to create a lightweight API server. Use Lua to handle API requests, and SQLite to store your data. The result is a single-file, dependency-free API server that is easy to deploy and maintain.</p>
+        </div>
     </div>
 </body>
+</html>
 </html>
