@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Macrobean: A Technical Deep Dive</title>
+    <title>macrobean</title>
     <link rel="stylesheet" href="style.css">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -15,10 +15,12 @@
           <img src="apple-touch-icon.png" alt="macrobean logo" width="120">
         </p>
 
-        <h1>Macrobean</h1>
+        <h1>macrobean</h1>
 
         <blockquote>
-          A secure, portable, single-file web server with Lua scripting, SQLite support, and TLS encryption. Zero dependencies, zero installation.
+            Macrobean is a self-contained, single-binary web server designed for simplicity, security, and portability. It can serve static files, execute dynamic Lua scripts, query SQLite databases, and handle TLS (HTTPS) traffic without requiring any external runtimes, libraries, or configuration files.
+
+            It's built for developers who need to deploy simple web applications quickly, hobbyists hosting a personal site, or anyone who values a minimal, dependency-free toolchain.
         </blockquote>
 
         <div class="downloads">
@@ -26,7 +28,7 @@
             <ul>
                 <li><a href="https://github.com/macrobean/dist/releases/download/v1.0.0/macrobean-macos.tar.gz">macrobean-macos.tar.gz</a></li>
                 <li><a href="https://github.com/macrobean/dist/releases/download/v1.0.0/macrobean-linux.tar.gz">macrobean-linux.tar.gz</a></li>
-                <li><a href="https://github.com/macrobean/dist/archive/refs/tags/v1.0.0.zip">Source Code (zip)</a></li>
+                <li><a href="https://github.com/macrobean/dist">Source Code</a></li>
             </ul>
         </div>
 
@@ -36,13 +38,12 @@
             <h2>Table of Contents</h2>
             <ul>
                 <li><a href="#core-concepts">1. Core Concepts</a></li>
-                <li><a href="#redbean-comparison">2. Macrobean vs. Redbean: A Philosophical Divergence</a></li>
-                <li><a href="#installation">3. Installation and Building from Source</a></li>
-                <li><a href="#cli">4. Command-Line Flags: The Complete Guide</a></li>
-                <li><a href="#lua-api">5. The Lua API</a></li>
-                <li><a href="#db-api">6. The Database API (--db)</a></li>
-                <li><a href="#security">7. Security Deep Dive</a></li>
-                <li><a href="#use-cases">8. Practical Use Cases</a></li>
+                <li><a href="#installation">2. Installation and Building from Source</a></li>
+                <li><a href="#cli">3. Command-Line Flags: The Complete Guide</a></li>
+                <li><a href="#lua-api">4. The Lua API</a></li>
+                <li><a href="#db-api">5. The Database API (--db)</a></li>
+                <li><a href="#security">6. Security Deep Dive</a></li>
+                <li><a href="#use-cases">7. Practical Use Cases</a></li>
             </ul>
         </div>
 
@@ -74,57 +75,7 @@
 
         <hr>
 
-        <h2 id="redbean-comparison">2. Macrobean vs. Redbean: A Philosophical Divergence</h2>
-
-        <p>Macrobean owes a significant intellectual and spiritual debt to the <code>redbean</code> project. <code>redbean</code> demonstrated that a single-file, cross-platform, high-performance web server was not just possible, but that it could be elegant and powerful.</p>
-
-        <p>Macrobean is not a fork or a clone of <code>redbean</code>. It is a different take on the same core idea, guided by a different philosophy: the <strong>Lua philosophy</strong>. Lua is not powerful because of what it has, but because of what it <em>doesn't</em> have. It is small, simple, and easily embeddable. It provides a minimal set of powerful mechanisms that can be extended and combined as needed. It doesn't try to be everything; it tries to be the best possible foundation to build upon.</p>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Feature</th>
-                    <th><code>redbean</code></th>
-                    <th><code>macrobean</code></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Philosophy</strong></td>
-                    <td>A comprehensive, all-in-one solution.</td>
-                    <td>A minimal, extensible toolkit.</td>
-                </tr>
-                <tr>
-                    <td><strong>Portability</strong></td>
-                    <td>Runs on 6+ operating systems.</td>
-                    <td>Focused on macOS and Linux.</td>
-                </tr>
-                <tr>
-                    <td><strong>Lua</strong></td>
-                    <td>Enhanced, with non-standard features.</td>
-                    <td>Standard, unmodified Lua 5.4.</td>
-                </tr>
-                <tr>
-                    <td><strong>Framework</strong></td>
-                    <td>Includes a built-in web framework.</td>
-                    <td>Provides primitives, no framework.</td>
-                </tr>
-                <tr>
-                    <td><strong>API</strong></td>
-                    <td>Offers high-level and low-level APIs.</td>
-                    <td>Offers a single, simple request API.</td>
-                </tr>
-                <tr>
-                    <td><strong>Goal</strong></td>
-                    <td>To be a complete, feature-rich server.</td>
-                    <td>To be the simplest possible foundation.</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <hr>
-
-        <h2 id="installation">3. Installation and Building from Source</h2>
+        <h2 id="installation">2. Installation and Building from Source</h2>
 
         <h3>Using Pre-compiled Binaries</h3>
 
@@ -170,7 +121,7 @@ echo "Hello from within!" > site/index.html</code></pre>
 
         <hr>
 
-        <h2 id="cli">4. Command-Line Flags: The Complete Guide</h2>
+        <h2 id="cli">3. Command-Line Flags: The Complete Guide</h2>
 
         <p>Macrobean is configured entirely via command-line flags. There are no config files.</p>
 
