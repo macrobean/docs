@@ -1,0 +1,65 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #fff;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Georgia", serif;
+    color: #111;
+}
+
+pre {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1em;
+    overflow-x: auto;
+}
+
+code {
+    font-family: "Menlo", "Consolas", monospace;
+    background-color: #f5f5f5;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+.toc {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1em;
+    margin-bottom: 2em;
+}
+
+.downloads {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1em;
+    margin-bottom: 2em;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2em;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f5f5f5;
+}
