@@ -18,50 +18,48 @@
         <h1>macrobean</h1>
 
         <blockquote>
-            macrobean is a self-contained, single-binary web server designed for simplicity, security, and portability. It can serve static files, execute dynamic Lua scripts, query SQLite databases, and handle TLS (HTTPS) traffic without requiring any external runtimes, libraries, or configuration files.
-
-            It's built for developers who need to deploy simple web applications quickly, hobbyists hosting a personal site, or anyone who values a minimal, dependency-free toolchain.
+            <p>Macrobean is a self-contained, single-binary web server designed for simplicity, security, and portability. It can serve static files, execute dynamic Lua scripts, query SQLite databases, and handle TLS (HTTPS) traffic without requiring any external runtimes, libraries, or configuration files. It's built for developers who need to deploy simple web applications quickly, hobbyists hosting a personal site, or anyone who values a minimal, dependency-free toolchain.</p>
         </blockquote>
 
-        <div class="section">
-        <div class="downloads">
-            <p><strong>downloads</strong></p>
-            <ul>
-                <li><a href="https://github.com/macrobean/dist/releases/download/v1.0.0/macrobean-macos.tar.gz">macrobean-macos.tar.gz</a></li>
-                <li><a href="https://github.com/macrobean/dist/releases/download/v1.0.0/macrobean-linux.tar.gz">macrobean-linux.tar.gz</a></li>
-                <li><a href="https://github.com/macrobean/dist">source code</a></li>
-            </ul>
-        </div>
+        <hr>
+
+        <h2 id="table-of-contents">table of contents</a></h2>
+        <ul>
+            <li><a href="#introduction">introduction</a></li>
+            <li><a href="#download">download</a></li>
+            <li><a href="#installation">installation</a></li>
+            <li><a href="#cli">cli flags</a></li>
+            <li><a href="#keys">keys</a></li>
+            <li><a href="#magic-numbers">magic numbers</a></li>
+            <li><a href="#watch">watch</a></li>
+            <li><a href="#lua-api">lua</a></li>
+            <li><a href="#db-api">sqlite</a></li>
+            <li><a href="#control-panel">control panel</a></li>
+            <li><a href="#mime-types">mime types</a></li>
+            <li><a href="#compression">compression</a></li>
+            <li><a href="#select()">select()</a></li>
+            <li><a href="#troubleshoot">troubleshoot</a></li>
+            <li><a href="#sandboxing">sandboxing</a></li>
+            <li><a href="#security">security</a></li>
+            <li><a href="#flags">flags</a></li>
+            <li><a href="#functions">functions</a></li>
+            <li><a href="#use-cases">use cases</a></li>
+        </ul>
 
         <hr>
 
-        <div class="toc">
-            <h2>table of contents</h2>
-            <ul>
-                <li><a href="#core-concepts">1. core concepts</a></li>
-                <li><a href="#installation">2. installation and building from source</a></li>
-                <li><a href="#cli">3. command-line flags</a></li>
-                <li><a href="#lua-api">4. lua API</a></li>
-                <li><a href="#db-api">5. database API (--db)</a></li>
-                <li><a href="#security">6. security</a></li>
-                <li><a href="#use-cases">7. some use cases</a></li>
-            </ul>
-        </div>
+        <h2 id="introduction"><a href="#introduction">introduction</a></h2>
 
-        <hr>
-
-        <div class="section">
-        <h2 id="core-concepts">1. core concepts</h2>
-
-        <h3>the philosophy: a retreat to sanity</h3>
+        <h3>philosophy: a retreat to sanity</h3>
 
         <p>Macrobean is a deliberate rejection of the accidental complexity that plagues modern software deployment. It champions the idea of a <strong>self-sufficient artifact</strong>: a single, executable file that is the entire application. There are no external runtimes to install, no package managers to appease, and no dependency trees to audit. Deployment is <code>scp</code>. Rollbacks are <code>mv</code>.</p>
 
         <p>This is achieved by combining a minimal C web server with a Lua interpreter, a SQLite engine, and the application's assets, all within a single file.</p>
 
-        <p>Macrobean owes a significant intellectual and spiritual debt to the `redbean` project. `redbean` demonstrated that a single-file, cross-platform, high-performance web server was not just possible, but that it could be elegant and powerful. More on the philosopy here: <a href="https://seedawk.bearblog.dev/macrobean/">kill the bloat</a></p>
+        <p>Macrobean owes a significant intellectual and spiritual debt to the <code>redbean</code> project. <code>redbean</code> demonstrated that a single-file, cross-platform, high-performance web server was not just possible, but that it could be elegant and powerful. More  background here: <a href="https://seedawk.bearblog.dev/macrobean/">kill the bloat</a></p>
 
-        <h3>ZIP-appended executable</h3>
+
+        <h3>zip-appended executable</h3>
 
         <p>The <code>macrobean</code> binary is a standard compiled executable. The magic lies in what comes after the executable code. A ZIP archive containing all the site assets (HTML, CSS, Lua scripts, etc.) is appended to the end of the binary.</p>
 
@@ -79,48 +77,60 @@
 
         <hr>
 
-        </div>
+        <h2 id="download"><a href="#download">download</a></h2>
 
-        <div class="section">
-        <h2 id="installation">2. installation and building from source</h2>
+        <p><strong>download the latest release</strong></p>
+        <ul>
+            <li><a href="https://github.com/macrobean/dist/releases/download/v1.0.0/macrobean-linux.tar.gz">linux</a></li>
+            <li><a href="https://github.com/macrobean/dist/releases/download/v1.0.0/macrobean-macos.tar.gz">macOS</a></li>
+            <li><a href="https://github.com/macrobean/dist">Source Code</a> with OS-specific instructions.</li>
+        </ul>
 
         <h3>using pre-compiled binaries</h3>
 
-        <p>The easiest way to use Macrobean is to download a pre-compiled binary for your OS. The only step is to make it executable:</p>
+        <p>The easiest way to use macrobean is to download the pre-compiled binary for your OS. After downloading, unzip the binary and make <code>macrobean.com</code> executable.</p>
 
-        <pre><code>chmod +x macrobean.com</code></pre>
+        <pre><code>chmod +x macrobean.com
+</code></pre>
 
-        <p>On macOS, you may need to remove the quarantine attribute:</p>
+        <p>Note: On macOS, you may need to remove the quarantine attribute:</p>
 
-        <pre><code>xattr -d com.apple.quarantine macrobean.com</code></pre>
+        <pre><code>xattr -d com.apple.quarantine macrobean.com
+</code></pre>
 
-        <h3>building from source</h3>
+        <h3>build from source</h3>
 
-        <p>To build Macrobean, you need a C compiler (<code>gcc</code> or <code>clang</code>) and the development headers for Lua and SQLite. If you want TLS support, you'll also need mbedTLS.</p>
+        <p>To build macrobean, you need a C compiler (<code>gcc</code>, <code>clang</code> or <code>GNU</code>). Any good C compiler would work.</p>
 
-        <p><strong>Dependencies (Debian/Ubuntu):</strong></p>
-        <pre><code>sudo apt-get install build-essential liblua5.4-dev libsqlite3-dev libmbedtls-dev</code></pre>
+        <p><strong>dependencies (Debian/Ubuntu):</strong></p>
 
-        <p><strong>Compile Command (No TLS):</strong></p>
-        <pre><code>gcc -O2 -o macrobean macrobean.c -llua5.4 -lsqlite3</code></pre>
+        <pre><code>sudo apt-get install build-essential liblua5.4-dev libsqlite3-dev libmbedtls-dev
+</code></pre>
 
-        <p><strong>Compile Command (With TLS):</strong></p>
-        <pre><code>gcc -O2 -DUSE_TLS -o macrobean macrobean.c -llua5.4 -lsqlite3 -lmbedtls -lmbedcrypto -lmbedx509</code></pre>
+        <p><strong>compile command (no TLS):</strong></p>
 
-        <h3>creating the final executable</h3>
+        <pre><code>gcc -O2 -o macrobean macrobean.c -llua5.4 -lsqlite3
+</code></pre>
+
+        <p><strong>compile command (with TLS):</strong></p>
+
+        <pre><code>gcc -O2 -DUSE_TLS -o macrobean macrobean.c -llua5.4 -lsqlite3 -lmbedtls -lmbedcrypto -lmbedx509
+</code></pre>
+
+        <h3>creating the final Executable</h3>
 
         <p>After compiling, you have the <code>macrobean</code> binary. To create the final, self-contained executable, you need to append your site's ZIP archive.</p>
 
         <ol>
-            <li><strong>Prepare your site:</strong>
-                <pre><code>mkdir -p site
-echo "Hello from within!" > site/index.html</code></pre>
+            <li><strong>Prepare your site:</strong><pre><code>mkdir -p site
+echo "Hello from within!" > site/index.html
+</code></pre>
             </li>
-            <li><strong>Create the store-only ZIP:</strong>
-                <pre><code>zip -r -0 site.zip site/</code></pre>
+            <li><strong>Create the store-only ZIP:</strong><pre><code>zip -r -0 site.zip site/
+</code></pre>
             </li>
-            <li><strong>Append the ZIP to the binary:</strong>
-                <pre><code>cat site.zip >> macrobean</code></pre>
+            <li><strong>Append the ZIP to the binary:</strong><pre><code>cat site.zip >> macrobean
+</code></pre>
             </li>
         </ol>
 
@@ -128,85 +138,186 @@ echo "Hello from within!" > site/index.html</code></pre>
 
         <hr>
 
-        </div>
+        <h2 id="installation"><a href="#installation">installation (<code>installer.sh</code>)</a></h2>
 
-        <div class="section">
-        <h2 id="cli">3. command-Line flags</h2>
+        <p>The <code>installer.sh</code> script provides an interactive way to configure and install Macrobean on your system. It is designed for both macOS and Linux.</p>
+
+        <p>To run it, make it executable and then execute it:</p>
+
+        <pre><code class="language-bash">chmod +x installer.sh
+./installer.sh
+</code></pre>
+
+        <p>The script will guide you through the following steps:</p>
+
+        <ol>
+            <li><strong>Platform Detection:</strong> It automatically detects your operating system.</li>
+            <li><strong>Configuration Prompts:</strong> It will ask you a series of questions to configure the server:
+            <ul>
+                <li><strong>Custom Port:</strong> Choose the port the server will run on (defaults to 8080).</li>
+                <li><strong>Enable Features:</strong> Answer yes (<code>y</code>) or no (<code>N</code>) to enable optional features like Lua scripting, SQLite database support, TLS/HTTPS, developer mode, and file watching.</li>
+                <li><strong>TLS Domain:</strong> If you enable TLS, it will ask for your domain name. It then attempts to verify that the domain points to your public IP and uses <code>certbot</code> to issue a free Let's Encrypt certificate. This step requires <code>sudo</code> privileges.</li>
+                <li><strong>External ZIP:</strong> You can provide a path to an external <code>site.zip</code> file, which is useful for development.</li>
+            </ul>
+            </li>
+            <li><strong>Installation:</strong> It copies the <code>macrobean.com</code> executable to <code>/usr/local/bin/macrobean</code> and makes it executable. This step also requires <code>sudo</code> privileges.</li>
+            <li><strong>Launch:</strong> Finally, it launches the <code>macrobean</code> server with all the flags you selected during the configuration process.</li>
+        </ol>
+
+        <hr>
+
+        <h2 id="cli"><a href="#cli">cli flags</a></h2>
 
         <p>Macrobean is configured entirely via command-line flags. There are no config files.</p>
 
         <table>
-            <thead>
-                <tr>
-                    <th>Flag</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>--help</code>, <code>-h</code></td>
-                    <td>Shows the help message and exits.</td>
-                </tr>
-                <tr>
-                    <td><code>--port &lt;n&gt;</code></td>
-                    <td>Sets the TCP port to listen on. Defaults to <code>8080</code>.</td>
-                </tr>
-                <tr>
-                    <td><code>--zip &lt;file&gt;</code></td>
-                    <td><strong>(Development)</strong> Use an external, uncompressed <code>site.zip</code> file instead of the one embedded in the binary. This is essential for development, as it allows you to change your site without recompiling or re-bundling.</td>
-                </tr>
-                <tr>
-                    <td><code>--dev</code></td>
-                    <td><strong>(Development)</strong> Enables developer mode, which provides verbose logging, detailed error pages (including stack traces for Lua errors), and enables the <code>/admin.html</code> panel.</td>
-                </tr>
-                <tr>
-                    <td><code>--watch</code></td>
-                    <td><strong>(Development)</strong> Enables hot-reloading. When used with <code>--zip</code>, it monitors the external <code>site.zip</code> file for changes and automatically reloads it. It also re-extracts the database file. Implies <code>--dev</code>.</td>
-                </tr>
-                <tr>
-                    <td><code>--lua</code></td>
-                    <td>Enables the Lua scripting engine. Requests for <code>.lua</code> files will execute them. Also enables the <code>init.lua</code> routing file.</td>
-                </tr>
-                <tr>
-                    <td><code>--db</code></td>
-                    <td>Enables the SQLite3 engine, making the global <code>db</code> object available in Lua.</td>
-                </tr>
-                <tr>
-                    <td><code>--fork</code></td>
-                    <td>Enables a process-per-request concurrency model. For each incoming connection, the main server process will <code>fork()</code> a child process to handle the request. This provides excellent isolation (a crash in one request won't affect the server), but has higher overhead than the default single-threaded model.</td>
-                </tr>
-                <tr>
-                    <td><code>--sandbox</code></td>
-                    <td><strong>(Security)</strong> Enables a strict Lua sandbox. This is highly recommended for production. It removes the <code>io</code>, <code>os</code>, <code>package</code>, and <code>debug</code> libraries to prevent filesystem access and command execution. It also installs a Lua hook that acts as a watchdog, terminating any script that runs for too long to prevent denial-of-service attacks from infinite loops.</td>
-                </tr>
-                <tr>
-                    <td><code>--tls</code></td>
-                    <td><strong>(Security)</strong> Enables HTTPS. Requires <code>--cert</code> and <code>--key</code> to be provided.</td>
-                </tr>
-                <tr>
-                    <td><code>--cert &lt;file&gt;</code></td>
-                    <td><strong>(Security)</strong> Path to your TLS certificate file in PEM format.</td>
-                </tr>
-                <tr>
-                    <td><code>--key &lt;file&gt;</code></td>
-                    <td><strong>(Security)</strong> Path to your TLS private key file in PEM format.</td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code>, <code>-h</code></td>
+<td>Shows the help message and exits.</td>
+</tr>
+<tr>
+<td><code>--port &lt;n&gt;</code></td>
+<td>Lets you set the TCP port to listen on. Defaults to <code>8080</code>. Any custom port setting requires that port to be free.</td>
+</tr>
+<tr>
+<td><code>--zip &lt;file&gt;</code></td>
+<td>Use an external, uncompressed <code>site.zip</code> file instead of the one embedded in the binary. This is essential for development, as it allows you to change your site without recompiling or re-bundling.</td>
+</tr>
+<tr>
+<td><code>--dev</code></td>
+<td>Enables developer mode, which provides verbose logging, detailed error pages (including stack traces for Lua errors), and enables the <code>/admin.html</code> panel.</td>
+</tr>
+<tr>
+<td><code>--watch</code></td>
+<td>Enables hot-reloading. When used with <code>--zip</code>, it monitors the external <code>site.zip</code> file for changes and automatically reloads it. It also re-extracts the database file. Implies <code>--dev</code>.</td>
+</tr>
+<tr>
+<td><code>--lua</code></td>
+<td>Enables the Lua scripting engine. Requests for <code>.lua</code> files will execute them. Also enables the <code>init.lua</code> routing file.</td>
+</tr>
+<tr>
+<td><code>--db</code></td>
+<td>Enables the SQLite3 engine, making the global <code>db</code> object available in Lua.</td>
+</tr>
+<tr>
+<td><code>--fork</code></td>
+<td>Enables a process-per-request concurrency model. For each incoming connection, the main server process will <code>fork()</code> a child process to handle the request. This provides excellent isolation (a crash in one request won't affect the server), but has higher overhead than the default single-threaded model.</td>
+</tr>
+<tr>
+<td><code>--sandbox</code></td>
+<td>Enables a strict Lua sandbox. This is highly recommended for production. It removes the <code>io</code>, <code>os</code>, <code>package</code>, and <code>debug</code> libraries to prevent filesystem access and command execution. It also installs a Lua hook that acts as a watchdog, terminating any script that runs for too long to prevent denial-of-service attacks from infinite loops.</td>
+</tr>
+<tr>
+<td><code>--tls</code></td>
+<td>Enables HTTPS. Requires <code>--cert</code> and <code>--key</code> to be provided.</td>
+</tr>
+<tr>
+<td><code>--cert &lt;file&gt;</code></td>
+<td>Path to your TLS certificate file in PEM format.</td>
+</tr>
+<tr>
+<td><code>--key &lt;file&gt;</code></td>
+<td>Path to your TLS private key file in PEM format.</td>
+</tr>
+</tbody>
+</table>
 
         <hr>
+<h2 id="keys"><a href="#keys">keys</a></h2>
+<p><code>microbean.com --tls --cert cert.pem --key key.pem</code> loads the certs to run the web server in TLS mode. Create a certificate using Let's Encrypt or generate a self-signed certificate with new RSA private key.</p>
+<pre><code> openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes 
+./macrobean --tls --cert cert.pem --key key.pem --lua --db --dev
+# Test with:
+curl -k https://localhost:8080/		
+</code></pre><p>Self-signed certificate is not suitable for production purposes. Use Let's Encrypt for custom domains. <code>certbot</code> needs root access.</p>
+<pre><code>$ sudo apt install certbot      							# installs TLS for your domain
+$ sudo certbot certonly --standalone -d exampledomain.com
+</code></pre><p>After setup, cert files will be:</p>
+<ul>
+<li>cert.pem: <code>/etc/letsencrypt/live/exampledomain.com/fullchain.pem</code></li>
+<li>key.pem:  <code>/etc/letsencrypt/live/exampledomain.com/privatekey.pem</code></li>
+</ul>
+<h2 id="magic-numbers"><a href="#magic-numbers">magic numbers</a></h2>
+<p>In case <code>./macrobean.com</code> returns <code>zsh: permission denied</code> for appending zip file at the end of macrobean, there is a workaround which does not require a polyglot header file. First confirm the nature of the binary.</p>
+<pre><code>$ file macrobean.com 
+# Mach-O 64-bit executable arm64
+$ hexdump -C /tmp/macrobean.com | head
+# This should return magic numbers cf fa ed fe ..  
+$ stat -f %z macrobean.com. # A
+$ stat -f %z macrobean      # B
+$ unzip -l site.zip         # C
+</code></pre><p>A = B + C; if this is not the case, the zip file is either corrupted or not appended properly.</p>
+<hr>
+<h2 id="watch"><a href="#watch">watch</a></h2>
+<p><code>watch</code> mode can only be used with <code>dev</code> mode and polls file modification timestamps at runtime and hot-reloads if changes happen. This works similar to inotify(Linux) or kqueue(macOS), using stat() every 2 seconds. Polling might incure slight CPU load and around ~1s delay.</p>
+<pre><code>$ ./macrobean --lua --db --dev --watch --zip site.zip
+</code></pre><p>This auto-reloads the changes made to site/ or data.db on disk without the need to run the command everytime user writes to the zip.</p>
+<h2 id="control-panel"><a href="#control-panel">control panel</a></h2>
+<p>The endpoint <code>/admin.html</code> works only with dev mode to allow uplifted access to other files in the directory. So, admin has all the access of developer mode besides a UI dashboard for dynamic CMS over <code>.lua</code> and <code>.db</code>. That's it – you can change routes or content directly from the browser like a form editor. If no site/admin.html then server returns not found in ZIP. Add it to site.zip. Server then gracefully falls back to 200 HTML.</p>
+<pre><code>$ curl http://localhost:8080/admin
+$ site/admin.html not found in ZIP. Add it to site.zip
+</code></pre><h2 id="mime-types"><a href="#mime-types">mime types</a></h2>
+<p>We use simple extension-based mapping that covers most web-asset types with predictive behaviour for zip-hosted files. This is different from <code>libmagic</code> used in Apache, Nginx and examines files headers (magic bytes) to identify MIME types. There is also Magika–an ML based MIME detector developed by Google, but that would need a python env. The in-built MIME type matching works well for most cases. Anyways, you can always add an extension according to the directory structure. For example, for typescript:</p>
+<pre><code>const char *guess_content_type(const char *filename) {
+if (ends_with(filename, ".ts")) return "text/typescript"; 
+}
+</code></pre><h2 id="compression"><a href="#compression">compression</a></h2>
+<p>As of now, macrobean supports "stored" (uncompressed) zip structure (files zipped using <code>0</code> method). Verify the compression method using
+<code>$ xxd test.zip | less</code> .</p>
+<pre><code>const unsigned char *extract_file_data(const zip_entry_t *entry, size_t *out_size) {
+    if ((entry->cmpr_method != 0) && (dev_mode)) {
+        printf("DEBUG: File '%s' is compressed (method %d), skipping
+",   // skips if not "uncompressed"
+               entry->filename, entry->cmpr_method);
+        return NULL;
+    }
+</code></pre><p>Look for compression method bytes (offset 8 in each local file handler). Some other compression methods (list is not exhaustive):</p>
+<pre><code>`1`  --- "Shrunk";
+`2`  --- "Reduced (factor 1)"
+`6`  --- "Imploded"
+`8`  --- "Deflated"
+`12` --- "BZIP2"
+`14` --- "LZMA"
+`18` --- "IBM TERESE"
+`20` --- "zstd"
+`95` --- "WavPack"
+`97` --- "AE-x encryption marker"		
+</code></pre><h2 id="select"><a href="#select">select()</a></h2>
+<p>The standard concurrency model is <code>select()</code> with <code>fork()</code> as an optional add-on to the server when <code>use_fork</code> is enabled.</p>
+<pre><code>#include <sys/select.h>
+int use_fork = 0;
+// wait for activity on any socket
+int ready = select(fd + 1, &readfds, NULL, NULL, NULL);
+</code></pre><h2 id="troubleshoot"><a href="#troubleshoot">troubleshoot</a></h2>
+<strong>Fixing compilation errors for <code>-llua</code></strong>
 
-        <div class="section">
-        <h2 id="lua-api">5. lua API</h2>
-
-        <p>When <code>--lua</code> is enabled, Macrobean exposes a simple but powerful API to your Lua scripts.</p>
-
-        <h3>The <code>request</code> Global Table</h3>
-
-        <p>Every Lua script has access to a global <code>request</code> table containing all the information about the incoming HTTP request.</p>
-
-        <pre><code>-- Example structure of the global 'request' table
+<p>If you are getting</p>
+<pre><code>$ gcc -o macrobean macrobean.c -llua
+# error: ... undefined symbols ...
+</code></pre><p>That likely means either lua development headers are not installed or they are not in <code>CPATH</code> or <code>LIBRARY_PATH</code>. Do <code>brew install lua</code> then compile with:</p>
+<pre><code>$ gcc -o macrobean macrobean.c -I/opt/homebrew/include -L/opt/homebrew/lib -llua
+$ gcc -o macrobean macrobean.c $(pkg-config --cflags --libs lua) 
+$ ./macrobean --lua --zip site.zip --dev
+# Hit http://localhost:8080/test.lua 
+</code></pre><strong>
+Memory Duplication:</strong> Avoid modifying global state inside forked child unless you know it's private. In other words, don't write global variables (or heap structures) in the child after <em>fork</em>, unless you are sure the memory is not shared, or you intend to keep the child around and accept the memory cost. Keep track of high memory usage in child process post-fork:
+<pre><code>$ ps aux | grep macrobean.com
+$ top
+$ htop
+</code></pre><ul>
+</ul>
+<h2 id="lua-api"><a href="#lua-api">lua</a></h2>
+<p>When <code>--lua</code> is enabled, Macrobean exposes APIs to your Lua scripts.</p>
+<h3><code>request</code> global table</h3>
+<p>Every Lua script has access to a global <code>request</code> table containing all the information about the incoming HTTP request.</p>
+<pre><code>-- Example structure of the global 'request' table
 request = {
   -- The full request path, including query string
   path = "/api/users?id=123"
@@ -229,34 +340,25 @@ request = {
   },
 
   -- The raw request body as a string
-  body = "{\"name\": \"Alice\"}",
+  body = "{"name": "Alice"}",
 
   -- A table of parameters from pattern-based routes
   -- This is only populated if the route was matched with a pattern
   params = {
     userId = "456" -- from a route like /users/:userId
   }
-}</code></pre>
-
-        <p>Your script should return a single string, which will be sent as the HTTP response body with a <code>200 OK</code> status and a <code>Content-Type</code> of <code>text/plain</code>.</p>
-
-        <h3>Routing with <code>init.lua</code></h3>
-
-        <p>If a file named <code>site/init.lua</code> exists, it is executed once when the server starts. This is the ideal place to define your application's logic and routes.</p>
-
-        <p><strong>Simple Routing:</strong></p>
-
-        <p>You can define simple, direct routes by adding functions to the global <code>routes</code> table.</p>
-
-        <pre><code>routes = {}
+}
+</code></pre><p>Your script should return a single string, which will be sent as the HTTP response body with a <code>200 OK</code> status and a <code>Content-Type</code> of <code>text/plain</code>.</p>
+<h3>routing with <code>init.lua</code></h3>
+<p>If a file named <code>site/init.lua</code> exists, it is executed once when the server starts. This is the ideal place to define your application's logic and routes.</p>
+<p><strong>simple routing:</strong></p>
+<p>You can define simple, direct routes by adding functions to the global <code>routes</code> table.</p>
+<pre><code>routes = {}
 routes["/"] = function() return "Home" end
-routes["/about"] = function() return "About Us" end</code></pre>
-
-        <p><strong>Pattern-Based Routing:</strong></p>
-
-        <p>For more complex routes, you can use the <code>route()</code> helper function, which supports named parameters.</p>
-
-        <pre><code>-- site/init.lua
+routes["/about"] = function() return "About Us" end
+</code></pre><p><strong>pattern-based routing:</strong></p>
+<p>For more complex routes, you can use the <code>route()</code> helper function, which supports named parameters.</p>
+<pre><code>-- site/init.lua
 
 -- This function is built-in for you
 -- route(pattern, handler)
@@ -270,13 +372,10 @@ end)
 route("/files/:category/:filename", function(params)
   return string.format("Category: %s, File: %s", 
     request.params.category, request.params.filename)
-end)</code></pre>
-
-        <p><strong>Middleware with <code>routes.before</code>:</strong></p>
-
-        <p>You can define a <code>routes.before</code> function that will be executed before every dynamic route handler. If this function returns a string, that string will be sent as the response, and the actual route handler will not be called. This is useful for authentication, logging, or other pre-request checks.</p>
-
-        <pre><code>-- site/init.lua
+end)
+</code></pre><p><strong>middleware with <code>routes.before</code>:</strong></p>
+<p>You can define a <code>routes.before</code> function that will be executed before every dynamic route handler. If this function returns a string, that string will be sent as the response, and the actual route handler will not be called. This is useful for authentication, logging, or other pre-request checks.</p>
+<pre><code>-- site/init.lua
 routes.before = function()
   local token = request.headers["X-Auth-Token"]
   if not token or token ~= "secret-password" then
@@ -284,49 +383,41 @@ routes.before = function()
     return "403 Forbidden: Invalid auth token"
   end
   -- If it returns nothing (nil), the request continues
-end</code></pre>
-
-        <h3>The <code>json()</code> Helper</h3>
-
-        <p>Macrobean provides a simple <code>json()</code> function to serialize a Lua table into a JSON string.</p>
-
-        <pre><code>route("/api/user", function()
+end
+</code></pre><p><strong>server pages:</strong></p>
+<p>Any request for a file ending in <code>.lua</code> will execute that file. The script should return a single string, which will be sent as the HTTP response body with a <code>200 OK</code> status.</p>
+<p><strong>example <code>site/hello.lua</code>:</strong></p>
+<pre><code>local name = request.query.name or "World"
+return "Hello, " .. name .. "!"
+</code></pre><p>A request to <code>/hello.lua?name=Macrobean</code> would return <code>Hello, Macrobean!</code>.</p>
+<p><strong><code>json()</code> helper API</strong></p>
+<p>macrobean provides a simple <code>json()</code> function to serialize a Lua table into a JSON string. Returns the string back to lua, which <code>serve_path()</code> writes.</p>
+<pre><code>route("/api/user", function()
   local user = { id = 1, name = "Alice", active = true }
   -- Set the content type header manually if needed
-  -- (Note: Macrobean doesn't have a response header API yet)
+  -- (Note: macrobean doesn't have a response header API yet)
   return json(user) -- returns '{"id":1,"name":"Alice","active":true}'
-end)</code></pre>
-
-</div>
-
+end)
+</code></pre><p>If instead of raw output, you get something like:</p>
+<pre><code>Pattern route error: attempt to call a table value
+</code></pre><p>Then the stack fit for the corresponding block is not correctly applied.</p>
 <hr>
-
-<div class="section">
-<h2 id="db-api">6. database API (<code>--db</code>)</h2>
-
+<h2 id="db-api"><a href="#db-api">sqlite</a></h2>
 <p>When <code>--db</code> is enabled, Macrobean provides a global <code>db</code> table for interacting with a SQLite database.</p>
-
 <p><strong>How it Works:</strong></p>
-
 <p>Your database file must be named <code>data.db</code> and placed in your <code>site</code> directory. When a Lua script calls a <code>db</code> function, Macrobean:</p>
-
 <ol>
-    <li>Extracts <code>site/data.db</code> from the in-memory ZIP archive.</li>
-    <li>Writes it to a temporary file at <code>/tmp/macrobean.db</code>.</li>
-    <li>Opens this temporary file with SQLite and executes the query.</li>
-    <li>If the query was a write operation (<code>db.exec</code>), the temporary file is updated.</li>
+<li>Extracts <code>site/data.db</code> from the in-memory ZIP archive.</li>
+<li>Writes it to a temporary file at <code>/tmp/macrobean.db</code>.</li>
+<li>Opens this temporary file with SQLite and executes the query.</li>
+<li>If the query was a write operation (<code>db.exec</code>), the temporary file is updated.</li>
 </ol>
-
 <p>This means your database is essentially read-only unless you are using the <code>--watch</code> flag, which will periodically re-extract the database from the <code>site.zip</code> file.</p>
-
 <h3><code>db.query(db_path, sql_query)</code></h3>
-
 <p>Executes a <code>SELECT</code> query. It always takes the path to the database as the first argument.</p>
-
 <ul>
-    <li><strong>Returns:</strong> An array of tables, where each table represents a row. Returns <code>nil</code> on error.</li>
+<li><strong>Returns:</strong> An array of tables, where each table represents a row. Returns <code>nil</code> on error.</li>
 </ul>
-
 <p><strong>Example (<code>query.lua</code>):</strong></p>
 <pre><code>-- URL: /query.lua?key=some_key
 
@@ -342,16 +433,14 @@ if rows and #rows > 0 then
   return rows[1].value
 else
   return "Not found"
-end</code></pre>
-
-<h3><code>db.exec(db_path, sql_query)</code></h3>
-
-<p>Executes a <code>CREATE</code>, <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code> statement.</p>
-
+end
+</code></pre><h3><code>db.exec(db_path, sql_query)</code></h3>
+<p>Executes CRUD statements.</p>
 <ul>
-    <li><strong>Returns:</strong> <code>true</code> on success, <code>nil</code> on error.</li>
+<li><strong>Signature:</strong> <code>db.exec(db_path, sql_query)</code></li>
+<li><strong><code>db_path</code>:</strong> Should always be <code>"/tmp/macrobean.db"</code></li>
+<li><strong>Returns:</strong> <code>true</code> on success, <code>nil</code> on error</li>
 </ul>
-
 <p><strong>Example (<code>submit.lua</code>):</strong></p>
 <pre><code>-- URL: /submit.lua?key=foo&value=bar (via POST)
 
@@ -364,76 +453,356 @@ if not k or not v then return "Missing key or value" end
 local sql = string.format("INSERT OR REPLACE INTO kv (key, value) VALUES ('%s', '%s');", k, v)
 db.exec("/tmp/macrobean.db", sql)
 
-return "Saved " .. k</code></pre>
-
-</div>
-
+return "Saved " .. k
+</code></pre>
 <hr>
-
-<div class="section">
-<h2 id="security">7. security</h2>
-
-<h3>TLS with mbedTLS (<code>--tls</code>)</h3>
-
+<h2 id="sandboxing"><a href="#sandboxing">sandboxing</a></h2>
+<p><code>--sandbox</code> lets you run code in sandbox mode with lua_sethook() to ensure that Lua code cannot hang or abuse the server - even if it is malicious or buggy.</p>
+<pre><code>#define SANDBOX_LIMIT 1000000   	
+</code></pre><p>We will disable <code>os</code> (no file or process access), <code>io</code> (no disk writes or stdin reads), <code>debug</code> (no introspection)
+Suppose the script includes:</p>
+<pre><code>route("/burn", function() 
+while true do end 
+end) 
+</code></pre><pre><code>$ ./macrobean.com --lua --sandbox --dev
+$ curl "http://localhost:8080/burn?secret=opensesame"
+</code></pre><pre><code>HTTP/1.1 500 Internal Server Error
+...
+Lua Error: Execution timed out (sandbox limit reached)
+</code></pre><p>Server survives. Memory intact. Thread continues.</p>
+<hr>
+<h2 id="security"><a href="#security">security</a></h2>
+<h3>mbedTLS (<code>--tls</code>)</h3>
 <p>When compiled with <code>-DUSE_TLS</code>, Macrobean uses the mbedTLS library to provide HTTPS. The <code>init_tls_server()</code> function in <code>macrobean.c</code> performs the following steps:</p>
-
 <ol>
-    <li>Initializes the mbedTLS configuration, entropy source, and random number generator.</li>
-    <li>Parses the server certificate provided via <code>--cert</code>.</li>
-    <li>Parses the private key provided via <code>--key</code>.</li>
-    <li>Sets up the SSL configuration with the loaded certificate and key.</li>
+<li>Initializes the mbedTLS configuration, entropy source, and random number generator.</li>
+<li>Parses the server certificate provided via <code>--cert</code>.</li>
+<li>Parses the private key provided via <code>--key</code>.</li>
+<li>Sets up the SSL configuration with the loaded certificate and key.</li>
 </ol>
-
 <p>When a new connection arrives, <code>handle_tls_client()</code> is called instead of <code>handle_http_client()</code>. It performs the TLS handshake before reading the HTTP request from the encrypted stream.</p>
-
-<h3>Sandboxing (<code>--sandbox</code>)</h3>
-
+<h3>sandbox (<code>--sandbox</code>)</h3>
 <p>The <code>--sandbox</code> flag is a critical security feature. The <code>init_lua()</code> function in <code>macrobean.c</code> performs these steps when sandboxing is enabled:</p>
-
 <ol>
-    <li><strong>Removes Dangerous Libraries:</strong> It explicitly sets the global variables for <code>io</code>, <code>os</code>, <code>package</code>, and <code>debug</code> to <code>nil</code>, effectively removing them from the Lua environment. This prevents scripts from accessing the filesystem, executing shell commands, or loading arbitrary code.</li>
-    <li><strong>Installs a Timeout Hook:</strong> It uses <code>lua_sethook</code> to register a <code>timeout_hook</code> function. This function is called by the Lua interpreter every <code>SANDBOX_LIMIT</code> (1,000,000) instructions. If the hook is called, it means the script has been running for too long, and it immediately terminates the script with an error. This prevents denial-of-service attacks caused by infinite loops.</li>
+<li><strong>Removes Dangerous Libraries:</strong> It explicitly sets the global variables for <code>io</code>, <code>os</code>, <code>package</code>, and <code>debug</code> to <code>nil</code>, effectively removing them from the Lua environment. This prevents scripts from accessing the filesystem, executing shell commands, or loading arbitrary code.</li>
+<li><strong>Installs a Timeout Hook:</strong> It uses <code>lua_sethook</code> to register a <code>timeout_hook</code> function. This function is called by the Lua interpreter every <code>SANDBOX_LIMIT</code> (1,000,000) instructions. If the hook is called, it means the script has been running for too long, and it immediately terminates the script with an error. This prevents denial-of-service attacks caused by infinite loops.</li>
 </ol>
-
-<h3>Process Isolation (<code>--fork</code>)</h3>
-
+<h3>process isolation (<code>--fork</code>)</h3>
 <p>The <code>--fork</code> flag provides OS-level isolation between requests. In the main <code>while(1)</code> loop, after <code>accept()</code>-ing a new connection, the server does the following:</p>
-
 <ol>
-    <li>Calls <code>fork()</code> to create a child process.</li>
-    <li><strong>In the child process:</strong> The child closes the main listening socket and calls either <code>handle_http_client</code> or <code>handle_tls_client</code> to process the request. After the request is finished, the child process exits (<code>_exit(0)</code>).</li>
-    <li><strong>In the parent process:</strong> The parent closes the client connection socket and immediately goes back to the <code>select()</code> loop to wait for new connections. It does not wait for the child to finish.</li>
+<li>Calls <code>fork()</code> to create a child process.</li>
+<li><strong>In the child process:</strong> The child closes the main listening socket and calls either <code>handle_http_client</code> or <code>handle_tls_client</code> to process the request. After the request is finished, the child process exits (<code>_exit(0)</code>).</li>
+<li><strong>In the parent process:</strong> The parent closes the client connection socket and immediately goes back to the <code>select()</code> loop to wait for new connections. It does not wait for the child to finish.</li>
 </ol>
-
 <p>The <code>signal(SIGCHLD, SIG_IGN)</code> call in <code>main()</code> tells the kernel that the parent process is not interested in the exit status of its children, so the kernel will automatically reap the zombie processes, preventing resource leaks.</p>
-
-</div>
-
 <hr>
+<h2 id="flags"><a href="#flags">flags</a></h2>
+<pre>
+  -h
+  --port
+  --dev
+  --fork
+  --zip
+  --lua
+  --db
+  --sandbox
+  --tls
+  --cert
+  --watch
+  --bundle</pre>
+<hr>
+<h2 id="functions"><a href="#functions">functions</a></h2>
+<h3>user-defined functions</h3>
+<p>discover_zip_structure()</p>
+<pre><code>scans the ZIP file structure and populates the zip_contents array. No return value.
+</code></pre><p>extract_file_data(const zip_entry_t *entry, size_t *out_size)</p>
+<pre><code>extracts file data from the ZIP archive for the given entry. Returns a pointer to the extracted data, or NULL on error.
+</code></pre><p>find_best_match(const char *requested_path)</p>
+<pre><code>finds the best matching file in the ZIP archive for the given path. Returns a pointer to the matching zip_entry_t, or NULL if no 	match is found.
+</code></pre><p>find_zip_entry(const char *path)</p>
+<pre><code>finds a file in the ZIP archive by its exact path. Returns a pointer to the zip_entry_t, or NULL if not found.
+</code></pre><p>guess_content_type(const char *path)</p>
+<pre><code>determines the MIME type of a file based on its extension. Returns a string containing the MIME type.
+</code></pre><p>handle_http_client(int client_fd)</p>
+<pre><code>handles an HTTP client connection. No return value.
+</code></pre><p>handle_tls_client(int client_fd)</p>
+<pre><code>handles a TLS-secured client connection. No return value.
+</code></pre><p>init_lua(void)</p>
+<pre><code>initializes the Lua interpreter and loads necessary libraries. Returns a pointer to the initialized Lua state.
+</code></pre><p>init_tls_server()</p>
+<pre><code>initializes the TLS server context. No return value.
+</code></pre><p>lua_json(lua_State *L)</p>
+<pre><code>a Lua function that converts a Lua table to a JSON string. Returns 1 (number of return values).
+</code></pre><p>main(int argc, char **argv)</p>
+<pre><code>the entry point of the program. Returns 0 on success, non-zero on error.
+</code></pre><p>process_client(int client_fd)</p>
+<pre><code>processes a client connection. No return value.
+</code></pre><p>run_server(int server_fd)</p>
+<pre><code>the main server loop. No return value.
+</code></pre><p>serialize_json(lua_State *L, int index, luaL_Buffer *bj)</p>
+<pre><code>serializes a Lua value to JSON. No return value.
+</code></pre><p>serve_path(int client_fd, const char *url_path, const char *method, const char *body)</p>
+<pre><code>serves a file or directory at the given URL path. No return value.
+</code></pre><p>serve_static(int client_fd, const char *url_path, const char *method, const char *body)</p>
+<pre><code>serves a static file from the ZIP archive. Returns true if the file was served, false otherwise.
+</code></pre><p>sqlite_exec(lua_State *L)</p>
+<pre><code>a Lua function that executes an SQL statement. Returns 1 (number of return values).
+</code></pre><p>sqlite_query(lua_State *L)</p>
+<pre><code>a Lua function that executes an SQL query and returns the results as a Lua table. Returns 1 (number of return values).
+</code></pre><p>timeout_hook(lua_State *L, lua_Debug *ar)</p>
+<pre><code>a Lua hook function that implements a timeout for Lua scripts. No return value.
+</code></pre><h3>standard library functions</h3>
+<p>accept(int socked, struct sockaddr *addr, socklen_t *addrlen)</p>
+<pre><code>Accepts a connection on a socket and returns a new socket file descriptor for the accepted connection.
+</code></pre><p>bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)</p>
+<pre><code>Binds a name to a socket. Used to associate a socket with a specific port and IP address.
+</code></pre><p>chdir(const char *path)</p>
+<pre><code>Changes the current working directory. Returns 0 on success, -1 on error.
+</code></pre><p>close(int fd)</p>
+<pre><code>Closes a file descriptor. Returns 0 on success, -1 on error.
+</code></pre><p>execvp(const char *file, char *const argv[])</p>
+<pre><code>Replaces the current process image with a new process image. Returns only on error.
+</code></pre><p>exit(int status)</p>
+<pre><code>Causes normal process termination. The status is returned to the parent process.
+</code></pre><p>fclose(FILE *stream)</p>
+<pre><code>Closes a stream. Retruns 0 on success, EOF on error.
+</code></pre><p>fopen(const char *pathname, const char *mode)</p>
+<pre><code>Opens a file. Returns a pointer on success, NULL on error.
+</code></pre><p>fork()</p>
+<pre><code>Creates a new process by duplicating the calling process. Returns 0 to the child process and the process ID of the child to the 	parent.
+</code></pre><p>fprintf(FILE *stream, const char *format, ...)</p>
+<pre><code>Writes formatted output to a stream. Returns the number of characters written.
+</code></pre><p>fread(void *ptr, size_t size, size_t nmemb, FILE *stream)</p>
+<pre><code>Reads data from a stream and returns the number of items read.
+</code></pre><p>free(void *ptr)</p>
+<pre><code>Frees the memory space pointed to by the ptr. No return value.
+</code></pre><p>fseek(FILE *stream, long offset, int whence)</p>
+<pre><code>Repositions the file position indicator. Returns 0 on success, -1 on error.
+</code></pre><p>fstat(int fd, struct stat *statbuf)</p>
+<pre><code>Gets file status. Returns 0 on success. -1 on error.
+</code></pre><p>ftell(FILE *stream)</p>
+<pre><code>Returns the current file position. Returns the current position on success, -1 on error.
+</code></pre><p>fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)</p>
+<pre><code>Write data to a stream. Returns the number of items written.
+</code></pre><p>getaddrinfo(const char *node, const char *service, const struct addrinfo *hints, struct addrinfo **res)</p>
+<pre><code>Network address and service translation. Returns 0 on success, non-zero on error.
+</code></pre><p>getcwd(char *buf, size_t size)</p>
+<pre><code>gets the current working directory. Returns a pointer to the buffer on success, NULL on error.
+</code></pre><p>getenv(const char *name)</p>
+<pre><code>gets an environment variable. Returns the value of the environment variable, or NULL if not found.
+</code></pre><p>gettimeofday(struct timeval *tv, struct timezone *tz)</p>
+<pre><code>Gets the time. Returns 0 on success, -1 on error.
+</code></pre><p>htonl(uint32_t hostlong)</p>
+<pre><code>Converts a 32-bit integer from host to network byte order. Returns the value in network byte order.
+</code></pre><p>listen(int sockfd, int backlog)</p>
+<pre><code>Listens for connections on a socket. Returns 0 on success, -1 on error.
+</code></pre><p>luaL_checkstring(lua_State *L, int narg)</p>
+<pre><code>Checks the function argument narg is a string. Returns the string.
+</code></pre><p>luaL_newstate()</p>
+<pre><code>creates a new lua state. returns the new state, or NULL on error.
+</code></pre><p>luaL_openlibs(lua_State *L)</p>
+<pre><code>opens all standard lua libraries.
+</code></pre><p>lua_call(lua_State *L, int nargs, int nresults)</p>
+<pre><code>calls a function in protected mode.
+</code></pre><p>lua_close(lua_State *L)</p>
+<pre><code>destroys a lua state.
+</code></pre><p>lua_getfield(lua_State *L, int idx, const char *k)</p>
+<pre><code>pushes onto the stack the value `t[k]`, where `t` is the value at the given index. No return value.
+</code></pre><p>lua_gettop(lua_State *L)</p>
+<pre><code>returns the index of the top element in the stack. Returns the index.
+</code></pre><p>lua_isstring(lua_State *L, int index)</p>
+<pre><code>returns 1 if the value at the given index is a string, and 0 otherwise.
+</code></pre><p>lua_istable(lua_State *L, int index)</p>
+<pre><code>returns 1 if the value at the given index is a table, and 0 otherwise.
+</code></pre><p>lua_newtable(lua_State *L)</p>
+<pre><code>creates a new empty table and pushes it onto the stack. No return value.
+</code></pre><p>lua_next(lua_State *L, int index)</p>
+<pre><code>pops a key from the stack, and pushes a key-value pair from the table at the given index. Returns 0 when there are no more 		elements.
+</code></pre><p>lua_pcall(lua_State *L, int nargs, int nresults, int msgh)</p>
+<pre><code>calls a function in protected mode. Returns 0 on success, or an error code.
+</code></pre><p>lua_pop(lua_State *L, int n)</p>
+<pre><code>pops `n` elements from the stack. No return value.
+</code></pre><p>lua_pushboolean(lua_State *L, int b)</p>
+<pre><code>pushes a boolean value onto the stack. 
+</code></pre><p>lua_pushinteger(lua_State *L, lua_Integer n)</p>
+<pre><code>pushes an integer value onto the stack.
+</code></pre><p>lua_pushlightuserdata(lua_State *L, void *p)</p>
+<pre><code>pushes a light user data onto the stack.
+</code></pre><p>lua_pushlstring(lua_State *L, const char *s, size_t len)</p>
+<pre><code>pushes a string with known length onto the stack. No return value.
+</code></pre><p>lua_pushnil(lua_State *L)</p>
+<pre><code>pushes a null value onto the stack.
+</code></pre><p>lua_pushnumber(lua_State *L, lua_Number n)</p>
+<pre><code>pushes a number onto the stack.
+</code></pre><p>lua_pushstring(lua_State *L, const char *s)</p>
+<pre><code>pushes a string onto the stack.
+</code></pre><p>lua_pushvalue(lua_State *L, int index)</p>
+<pre><code>pushes a copy of the known element onto the stack.
+</code></pre><p>lua_setfield(lua_State *L, int index, const char *k)</p>
+<pre><code>does the equivalent to `t[k] = v`, where `t` is the value of the given index and `v` is the value at the top of stack.
+</code></pre><p>lua_settop(lua_State *L, int index)</p>
+<pre><code>sets the stack top to the given index.
+</code></pre><p>lua_toboolean(lua_State *L, int index)</p>
+<pre><code>converts the lua value at the given index to a `C` boolean value and returns the converted value.
+</code></pre><p>lua_tolstring(lua_State *L, int index, size_t *len)</p>
+<pre><code>converts the lua value at the given index to a `C` string and returns the string.
+</code></pre><p>lua_tonumber(lua_State *L, int index)</p>
+<pre><code>converts the lua value at the given index to a `C` number and returns the converted value.
+</code></pre><p>lua_touserdata(lua_State *L, int index)</p>
+<pre><code>converts the lua value at the given index to a user data and returns the userdata.
+</code></pre><p>lua_type(lua_State *L, int index)</p>
+<pre><code>returns the type of the value at the given index as an integer.
+</code></pre><p>lua_typename(lua_State *L, int tp)</p>
+<pre><code>returns the name of the type encoded by the value `tp`. Returns the type name.
+</code></pre><p>luaL_Buffer</p>
+<pre><code>Lua buffer for string concatenation.
+</code></pre><p>luaL_buffinit(lua_State *L, luaL_Buffer *B)</p>
+<pre><code>initialises a buffer.
+</code></pre><p>luaL_buffinitsize(lua_State *L, luaL_Buffer *B, size_t sz)</p>
+<pre><code>initialises a buffer with a preallocated size and returns a pointer to the buffer. 
+</code></pre><p>luaL_prepbuffsize(luaL_Buffer *B, size_t sz)</p>
+<pre><code>returns an address to a space of size `sz` where you can copy a string to be added to buffer `B` and returns the address.
+</code></pre><p>luaL_pushresult(luaL_Buffer *B)</p>
+<pre><code>finishes the use of buffer `B` leaving the final string on the top of the stack. 
+</code></pre><p>luaL_pushresultsize(luaL_Buffer *B, size_t sz)</p>
+<pre><code>equivalent to the sequence `luaL_addsize` + `luaL_pushresult`. No return value.
+</code></pre><p>luaL_tolstring(lua_State *L, int idx, size_t *len)</p>
+<pre><code>converts any lua value at the given index to a `C` string in a reasonable format. Returns the string.
+</code></pre><p>malloc(size_t size)</p>
+<pre><code>allocates size bytes of memory. Returns a pointer to the allocated memory, or NULL on error.
+</code></pre><p>memchr(const void *s, int c, size_t n)</p>
+<pre><code>scans the initial `n` bytes of the memory area pointed to by `s` for the first instance of `c`. Returns a pointer to the matching 	byte, or NULL if not found. 
+</code></pre><p>memcmp(const void *s1, const void *s2, size_t n)</p>
+<pre><code>compares the first `n` bytes of the memory areas `s1` and `s2`. Returns an integer less than, equal to, or greater than zero if 	`s1` is found to be less than, equal to, or greater than `s2`.
+</code></pre><p>memcpy(void *dest, const void *src, size_t n)</p>
+<pre><code>copies `n` bytes from memory area `src` to `dest`. Returns a pointer to `dest`.
+</code></pre><p>memset(void *s, int c, size_t n)</p>
+<pre><code>fills the first `n` bytes of the memory area pointed to by `s` with the constant byte `c`. Returns a pointer to the memory area 	`s`.
+</code></pre><p>opendir(const char *name)</p>
+<pre><code>opens a directory stream. Returns a pointer to the directory stream, or NULL on error.
+</code></pre><p>perror(const char *s)</p>
+<pre><code>prints a description of the error code currently stored in the system variable errno.
+</code></pre><p>printf(const char *format, ...)</p>
+<pre><code>writes formatted output to stdout. Returns the number of characters written.
+</code></pre><p>read(int fd, void *buf, size_t count)</p>
+<pre><code>reads up to count bytes from file descriptor `fd` into the buffer starting at `buf`. Returns the number of bytes read, 0 on EOF,		
+or -1 on error.
+</code></pre><p>readdir(DIR *dirp)</p>
+<pre><code>returns a pointer to a dirent structure representing the next directory entry in the directory stream. Returns a pointer to the 	structure, or NULL on end-of-directory or error.
+</code></pre><p>realloc(void *ptr, size_t size)</p>
+<pre><code>changes the size of the memory block pointed to by ptr to size bytes. Returns a pointer to the newly allocated memory, or NULL on 	error.
+</code></pre><p>recv(int sockfd, void *buf, size_t len, int flags)</p>
+<pre><code>receives a message from a socket. Returns the number of bytes received, or -1 on error.
+</code></pre><p>select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)</p>
+<pre><code>monitors multiple file descriptors, waiting until one or more of the file descriptors become "ready" for some class of I/O 		operation. Returns the number of file descriptors in the descriptor sets, or -1 on error.
+</code></pre><p>send(int sockfd, const void *buf, size_t len, int flags)</p>
+<pre><code>sends a message on a socket. Returns the number of bytes send, or -1 on error.
+</code></pre><p>setenv(const char *name, const char *value, int overwrite)</p>
+<pre><code>Adds the variable name to the environment with the value. Returns 0 on success, -1 on error.
+</code></pre><p>signal(int signum, void (*handler)(int))</p>
+<pre><code>Sets the disposition of the signal signum to handler. Returns the previous value of the signal handler, or SIG_ERR on error.
+</code></pre><p>snprintf(char *str, size_t size, const char *format, ...)</p>
+<pre><code>Write formatted output to a string and returns the number of characters that would have been written, or a negative value on 		error.
+</code></pre><p>socket(int domain, int type, int protocol)</p>
+<pre><code>creates an endpoint for communication. Returns a file descriptor for the new socket, or -1 on error.
+</code></pre><p>sprintf(char *str, const char *format, ...)</p>
+<pre><code>writes formatted output to a string. Returns the number of character written, or a negative value on error.
+</code></pre><p>sqlite3_bind_int(sqlite3_stmt*, int, int)</p>
+<pre><code>binds an integer value to a parameter in a prepared statement. Returns SQLITE_OK on success, or an error code on failure.
+</code></pre><p>sqlite3_close(sqlite3*)</p>
+<pre><code>closes a database connection. Returns SQLITE_OK on success, or an error code on failure.
+</code></pre><p>sqlite3_column_count(sqlite3_stmt*)</p>
+<pre><code>returns the number of columns in the result set of a prepared statement. Returns the number of columns.
+</code></pre><p>sqlite3_errmsg(sqlite3*)</p>
+<pre><code>returns the English-language text that describes the most recent error. Returns the error message.
+</code></pre><p>sqlite3_exec(sqlite3*, const char *sql, int (*callback)(void*,int,char**,char**), void *, char **errmsg)</p>
+<pre><code>executes one or more SQL statements. Returns SQLITE_OK on success, or an error code on failure
+</code></pre><p>sqlite3_finalize(sqlite3_stmt *pStmt)</p>
+<pre><code>destroys a prepared statement object. Returns SQLITE_OK on success, or an error code on failure.
+</code></pre><p>sqlite3_free(void*)</p>
+<pre><code>frees the memory allocated by SQLite and no return value.
+</code></pre><p>sqlite3_open_v2(const char *filename, sqlite3 **ppDb, int flags, const char *zVfs)</p>
+<pre><code>opens a database connection with additional options. Returns SQLITE_OK on success, or an error code on failure.
+</code></pre><p>sqlite3_reset(sqlite3_stmt *pStmt)</p>
+<pre><code>resets a prepared statement object back to its initial state. 
+</code></pre><p>sqlite3_step(sqlite3_stmt*)</p>
+<pre><code>evaluates a prepared statement. Returns SQLITE_ROW if a row of data is available, SQLITE_DONE if the statement has finished 		executing, or an error code on failure.
+</code></pre><p>sqlite3_stmt</p>
+<pre><code>a pointer to a prepared statement object. 
+</code></pre><p>srand(unsigned int seed)</p>
+<pre><code>sets the seed for the random number generator. No return value.
+</code></pre><p>stat(const char *pathname, struct stat *statbuf)</p>
+<pre><code>gets file status. Returns 0 on success, -1 on error. 
+</code></pre><p>strcasecmp(const char *s1, const char *s2)</p>
+<pre><code>compares two strings, ignoring case. Returns an integer less than, equal to, or greater than zero if `s1` is found to be less 		than, equal to, or greater than `s2`.
+</code></pre><p>strcasestr(const char *haystack, const char *needle)</p>
+<pre><code>locates a substring in a string, ignoring case. Returns a pointer to the beginning of the substring, or NULL if the substring is 	not found.
+</code></pre><p>strchr(const char *s, int c)</p>
+<pre><code>locates the first occurrence of `c` in the string `s`. Returns a pointer to the located character, or NULL if the character does 	not appear in the string.
+</code></pre><p>strcmp(const char *s1, const char *s2)</p>
+<pre><code>compares the two strings `s1` and `s2`. Returns an integer less than, equal to, or greater than zero if `s1` is found to be less than, 	equal to, or greater than `s2`.
+</code></pre><p>strcpy(char *dest, const char *src)</p>
+<pre><code>copies the string pointed to by src to the buffer pointed to by dest. Returns a pointer to the duplicated string, or NULL on 		error.
+</code></pre><p>strcspn(const char *s, const char *reject)</p>
+<pre><code>calculates the length of the initial segment of s which consists entirely of bytes not in reject. Returns the length of the 		segment.
+</code></pre><p>strdup(const char *s)</p>
+<pre><code>returns a pointer to a new string which is a duplicate of the string `s`. Returns a pointer to the duplicated string, or `NULL` 	on error.	
+</code></pre><p>strerror(int errnum)</p>
+<pre><code>returns a string describing the error code errnum. Returns the error string.
+</code></pre><p>strlen(const char *s)</p>
+<pre><code>calculates the length of the string `s`, excluding the terminating null byte. Returns the number of characters in the string.
+</code></pre><p>strncasecmp(const char *s1, const char *s2, size_t n)</p>
+<pre><code>compares the first `n` bytes of the string `s1` and `s2`, ignoring case. Returns an integer less than, equal to, or greater than 	zero if `s1` is found to be less than, equal to, or greater than `s2`. 
+</code></pre><p>strncmp(const char *s1, const char *s2, size_t n)</p>
+<pre><code>compares the first `n` bytes of the strings `s1` and `s2`, ignoring case. Returns an integer less than, equal to, or greater than 	zero if `s1` is found to be less than, equal to, or greater than `s2`.
+</code></pre><p>strncpy(char *dest, const char *src, size_t n)</p>
+<pre><code>copies at most `n` bytes from the string pointed to by `src` to the buffer pointed to by dest. Returns a pointer to the 			destination 	string.
+</code></pre><p>strndup(const char *s, size_t n)</p>
+<pre><code>returns a pointer to a new string which is a duplicate of the string `s`, but only copies at most `n` bytes. Returns a pointer to 	the duplicated string, or NULL on error.
+</code></pre><p>strrchr(const char *s, int c)</p>
+<pre><code>locates the last occurrence of `c` in the string `s`. Returns a pointer to the located character, or NULL if the character does 	not appear in the string.
+</code></pre><p>strstr(const char *haystack, const char *needle)</p>
+<pre><code>locates the first occurrence of the substring needle in the string haystack. Returns a pointer to the beginning of the substring, 	or NULL if the substring is not found.
+</code></pre><p>strtod(const char *nptr, char **endptr)</p>
+<pre><code>converts the initial portion of the string pointed to by `nptr` to double. Returns the converted value.
+</code></pre><p>strtok(char *str, const char *delim)</p>
+<pre><code>extracts the tokens from the string `s`, which are sequences of contiguous characters separated by any of the characters the 		string `delim`. Returns a pointer to the next token, or NULL if there are no more tokens.
+</code></pre><p>system(const char *command)</p>
+<pre><code>executes a shell command. Returns the exit status of the command. 
+</code></pre><p>time(time_t *tloc)</p>
+<pre><code>returns the time as the number of seconds since the Epoch and returns the current time.
+</code></pre><p>unlink(const char *pathname)</p>
+<pre><code>deletes a name from the filesystem. Returns 0 on success, -1 on error.
+</code></pre><p>vsnprintf(char *str, size_t size, const char *format, va_list ap)</p>
+<pre><code>writes formatted output to a string using a variable argument list. Returns the number of characters written, or a negative value 	on error.
+</code></pre><p>waitpid(pid_t pid, int *wstatus, int options)</p>
+<pre><code>waits for a child process to change state. Returns the process ID of the child whose state has changed, or -1 on error.
+</code></pre><p>write(int fd, const void *buf, size_t count)</p>
+<pre><code>writes up to count bytes from the buffer starting at `buf` to the file referred to by the file descriptor `fd`.
+Returns the number of bytes written, or -1 on error.
+</code></pre><h3>macros</h3>
+<p><code>MAX_FILES:</code> The maximum number of files that can be stored in the ZIP archive.</p>
 
-<div class="section">
-<h2 id="use-cases">8. some use cases</h2>
 
-<p>Macrobean is well-suited for a variety of tasks where simplicity and portability are paramount.</p>
+<p><code>MAX_PATH:</code> The maximum length of a file path.</p>
+<p><code>MAX_REQ:</code>The maximum size of an HTTP request.</p>
 
-<h3>Simple Static Site Hosting</h3>
-<p>The most basic use case is serving a static website. Simply package your HTML, CSS, and JavaScript files into a <code>site.zip</code>, append it to the <code>macrobean</code> binary, and you have a single-file web server that you can deploy anywhere.</p>
-        <h3>Prototyping and Demos</h3>
-        <p>Macrobean is an excellent tool for quickly prototyping web applications or creating self-contained demos. You can build a fully functional application with Lua and SQLite, and then distribute it as a single file that anyone can run without any setup.</p>
+<p><code>PORT</code> The default port number for the server.</p>
 
-        <h3>Personal Wiki or Blog</h3>
-        <p>With a few Lua scripts, you can create a simple but powerful personal wiki or blog. Use Lua to render Markdown files, and SQLite to store your posts and metadata. The entire site can be a single file that you can easily back up or move to a different server.</p>
+<p><code>SANDBOX_LIMIT</code> The maximum size of a file that can be served in sandbox mode.</p>
 
-        <h3>API Server</h3>
-        <p>Macrobean can be used to create a lightweight API server. Use Lua to handle API requests, and SQLite to store your data. The result is a single-file, dependency-free API server that is easy to deploy and maintain.</p>
-        </div>
+<p><code>USE_TLS:</code>Defined if TLS support is enabled.</p>
+<hr>
+<h2 id="use-cases"><a href="#use-cases">use cases</a></h2>
+<p>macrobean is well-suited for a variety of tasks where simplicity and portability are paramount.</p>
+<h3>simple static site hosting</h3>
+<p>the most basic use case is serving a static website. simply package your html, css, and javascript files into a <code>site.zip</code>, append it to the <code>macrobean</code> binary, and you have a single-file web server that you can deploy anywhere.</p>
+<h3>prototyping and demos</h3>
+<p>macrobean is an excellent tool for quickly prototyping web applications or creating self-contained demos. you can build a fully functional application with lua and sqlite, and then distribute it as a single file that anyone can run without any setup.</p>
+<h3>personal wiki or blog</h3>
+<p>With a few Lua scripts, you can create a simple but powerful personal wiki or blog. Use Lua to render Markdown files, and SQLite to store your posts and metadata. The entire site can be a single file that you can easily back up or move to a different server.</p>
+<h3>API server</h3>
+<p>Macrobean can be used to create a lightweight API server. Use Lua to handle API requests, and SQLite to store your data. The result is a single-file, dependency-free API server that is easy to deploy and maintain.</p>
     </div>
-        <footer class="site-footer">
-        <div class="container">
-            <p>🦄 If you find this project useful, please consider giving it a star on <a href="https://github.com/macrobean" target="_blank" rel="noopener">github</a> to show your support!</p>
-            <p>Your support motivates me for further development and improvements. 🫡Thank you!</p>
-        </div>
-    </footer>
 </body>
-</html>
 </html>
