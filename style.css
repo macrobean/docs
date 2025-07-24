@@ -1,31 +1,28 @@
-body {
-    font-family: Optima, Candara, Calibri, Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #fff;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2em;
+html {
+  font-family: 'Franklin Gothic Medium', Arial, sans-serif;
+  font-size: 12pt;
+  color: #222;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: "Georgia", serif;
-    color: #111;
+body {
+  overflow-wrap: anywhere;
+  max-width: calc(100vw - 3em);
+  width: 90ch;
+  margin: 0 auto;
+}
+
+img[width="650"] {
+  max-width: 85vw;
+  max-height: 33vw;
 }
 
 pre {
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
     padding: 1em;
     overflow-x: auto;
 }
 
 code {
-    font-family: "Lucida Console", Monaco, monospace;
-    background-color: #f5f5f5;
-    padding: 2px 4px;
-    border-radius: 4px;
+    font-family: TinyPragmataPro, monospace;
 }
 
 pre code {
@@ -33,6 +30,7 @@ pre code {
     padding: 0;
     border-radius: 0;
 }
+
 
 .toc {
     border: 1px solid #ddd;
