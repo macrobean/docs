@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta property="og:title" content="macrobean" />
+<meta property="og:description" content="A single file cross-compatible web server" />
+<meta property="og:image" content="https://gaurv.me/assets/preview.jpg" />
+<meta property="og:url" content="https://macrobean.site/" />
+<meta property="og:type" content="website" />
+    
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="macrobean" />
+<meta name="twitter:description" content="A single file cross-compatible web server" />
+<meta name="twitter:image" content="https://macrobean.site/assets/preview.jpg" />
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>macrobean</title>
@@ -794,7 +805,7 @@ Returns the number of bytes written, or -1 on error.
 <p><code>USE_TLS:</code>Defined if TLS support is enabled.</p>
 <hr>
 <h2 id="use-cases"><a href="#use-cases">use cases</a></h2>
-<p>macrobean is well-suited for a variety of tasks where simplicity and portability are paramount.</p>
+<p>macrobean is well-suited (but not limited to) for the following tasks.</p>
 <h3>simple static site hosting</h3>
 <p>the most basic use case is serving a static website. simply package your html, css, and javascript files into a <code>site.zip</code>, append it to the <code>macrobean</code> binary, and you have a single-file web server that you can deploy anywhere.</p>
 <h3>prototyping and demos</h3>
@@ -804,5 +815,12 @@ Returns the number of bytes written, or -1 on error.
 <h3>API server</h3>
 <p>Macrobean can be used to create a lightweight API server. Use Lua to handle API requests, and SQLite to store your data. The result is a single-file, dependency-free API server that is easy to deploy and maintain.</p>
     </div>
+    
+        <footer class="site-footer">
+        <div class="container">
+            <p>🦄 If you find this project useful, please consider giving it a star on <a href="https://github.com/macrobean" target="_blank" rel="noopener">github</a> to show your support!</p>
+            <p>Your support motivates me for further development and improvements. 🫡Thank you!</p>
+        </div>
+    </footer>
 </body>
 </html>
